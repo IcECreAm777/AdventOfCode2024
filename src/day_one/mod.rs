@@ -2,8 +2,6 @@ use std::fs::read_to_string;
 use std::collections::HashMap;
 
 pub fn run_day_01() {
-    println!("executing task 01...");
-
     let mut left_list: Vec<i64> = std::vec::Vec::new();
     let mut right_list: Vec<i64>  = std::vec::Vec::new();
 
@@ -25,8 +23,7 @@ pub fn run_day_01() {
         distance += (right_list[i] - left_list[i]).abs();
     }
 
-    println!("result for task 01: {distance}");
-    println!("executing task 02...");
+    println!("\tresult for task 01: {distance}");
 
     let mut scores: HashMap<i64, i64> = HashMap::new();
     let mut sum_of_scores = 0;
@@ -70,5 +67,5 @@ pub fn run_day_01() {
         sum_of_scores += score;
     }
 
-    println!("result for task 02: {}", sum_of_scores);
+    println!("\tresult for task 02: {}", sum_of_scores);
 }

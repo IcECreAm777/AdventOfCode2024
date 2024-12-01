@@ -35,5 +35,4 @@ fn run_every_day() {
 fn day_one() {
     println!("running day one...");
     day_one::run_day_01();
-    println!("finished day one!");
 }
