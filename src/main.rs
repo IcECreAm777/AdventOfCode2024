@@ -3,6 +3,7 @@ use std::env;
 mod day_one;
 mod day_two;
 mod day_three;
+mod day_four;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -24,6 +25,7 @@ fn main() {
         1 => day_one(),
         2 => day_two(),
         3 => day_three(),
+        4 => day_four(),
         _ => run_every_day(),
     }
 }
@@ -34,6 +36,7 @@ fn run_every_day() {
     day_one();
     day_two();
     day_three();
+    day_four();
 
     println!("finished executing every day!")
 }
@@ -51,4 +54,9 @@ fn day_two() {
 fn day_three() {
     println!("running day three...");
     day_three::run_day_03();
+}
+
+fn day_four() {
+    println!("running day four...");
+    day_four::run_day_04();
 }
