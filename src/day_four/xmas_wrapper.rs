@@ -5,17 +5,17 @@ pub struct XMasWrapper {
 }
 
 impl XMasWrapper {
-    pub fn new() -> XMasWrapper {
-        XMasWrapper {
+    pub fn new(path: &str) -> XMasWrapper {
+        let mut result = XMasWrapper {
             lines: vec![]
-        }
-    }
-    
-    pub fn initialize_from_file(&mut self, path: &str) {
+        };
+
         for line in read_to_string(path).unwrap().lines() {
             let parsed = String::from(line);
-            self.lines.push(parsed);
+            result.lines.push(parsed);
         }
+
+        result
     }
 
     pub fn find_xmas(&self) -> i64 {
