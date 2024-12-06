@@ -75,7 +75,6 @@ impl InstructionWrapper {
                 valid_result += middle_page as i64;
             } else {
                 invalid_result += middle_page as i64;
-                println!("{:#?}", line);
             }
         }
 
