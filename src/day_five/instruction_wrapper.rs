@@ -28,13 +28,7 @@ impl InstructionWrapper {
                     dependencies.insert(first, dep);
                 }
 
-                if !dependencies.contains_key(&second) {
-                    let dep = Dependency::new();
-                    dependencies.insert(second, dep);
-                }
-
                 dependencies.get_mut(&first).unwrap().add_next(second);
-                dependencies.get_mut(&second).unwrap().add_previous(first);
 
                 continue;
             }
@@ -54,34 +48,37 @@ impl InstructionWrapper {
         }
     }
 
-    pub fn get_valid_lines(self) -> i64 {
-        let mut result: i64 = 0;
+    pub fn get_line_results(self) -> (i64, i64) {
+        let mut valid_result: i64 = 0;
+        let mut invalid_result: i64 = 0;
 
-        for line in self.pages {
+        for mut line in self.pages {
             let mut is_valid = true;
 
             for i in 1..line.len() {
-                if !is_valid { break; }
-
                 for j in 0..i {
                     let prev = line[j];
                     let current = line[i];
                     let dep = self.dependencies.get(&current).unwrap();
                     
                     if dep.is_next(prev) {
+                        line.swap(i, j);
                         is_valid = false;
                     }
                 }
             }
 
-            if is_valid {               
-                let index = line.len() / 2;
-                let middle_page = line[index];
+            let index = line.len() / 2;
+            let middle_page = line[index];
 
-                result += middle_page as i64;
+            if is_valid {               
+                valid_result += middle_page as i64;
+            } else {
+                invalid_result += middle_page as i64;
+                println!("{:#?}", line);
             }
         }
 
-        result
+        (valid_result, invalid_result)
     }
 }
