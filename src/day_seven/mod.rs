@@ -1,5 +1,7 @@
 use std::fs::read_to_string;
 
+mod operators;
+
 pub fn run_day_07() {
     let path = r"src\day_seven\input.txt";
     
@@ -45,7 +47,7 @@ fn task_02(path: &str) -> i64 {
         let split_by_colon: Vec<&str> = line.split(":").collect();
         let target_result = split_by_colon[0].parse::<i64>().unwrap();
         let numbers: Vec<&str> = split_by_colon[1].split_whitespace().collect();
-        let operators = Operators::new(numbers.len());
+        let operators = operators::Operators::new(numbers.len());
 
         for op in operators {
             let mut intermediate_result = numbers[0].parse::<i128>().unwrap();
@@ -67,41 +69,4 @@ fn task_02(path: &str) -> i64 {
     }
 
     result
-}
-
-struct Operators {
-    operators: Vec<i8>
-}
-
-impl Operators {
-    fn new(len: usize) -> Operators {
-        let mut ops = vec![0; len-1];
-        ops[0] = -1;
-
-        Operators { 
-            operators: ops
-        }
-    }
-}
-
-impl Iterator for Operators {
-    type Item = Vec<i8>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let mut over = 0;
-
-        for i in 0..self.operators.len() {
-            over = 0;
-            self.operators[i] += 1;
-
-            if self.operators[i] < 3 {
-                break;
-            }
-
-            self.operators[i] = 0;
-            over = 1;
-        }
-
-        if over == 0 {Some(self.operators.clone())} else {None}
-    }
 }
