@@ -7,14 +7,14 @@ enum TileState {
     Visited
 }
 
-pub struct Area {
+pub struct SimpleArea {
     area: Vec<Vec<TileState>>,
     guard_position: (usize, usize),
     walk_direction: (i32, i32),
 }
 
-impl Area {
-    pub fn new(path: &str) -> Area {
+impl SimpleArea {
+    pub fn new(path: &str) -> SimpleArea {
         let mut guard_position = (0, 0);
         let mut area = vec![];
 
@@ -41,7 +41,7 @@ impl Area {
             i += 1;
         }
 
-        Area {  
+        SimpleArea {  
             area,
             guard_position,
             walk_direction: (-1, 0)
