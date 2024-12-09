@@ -29,12 +29,14 @@ pub fn run_day_08() {
         width += 1;
     }
 
-    let task_one_result = task_01(sorted_antennas, width, height as i32);
+    let task_one_result = task_01(&sorted_antennas, width, height as i32);
+    let task_two_result = task_02(&sorted_antennas, width, height as i32);
 
     println!("\t task one result: {}", task_one_result);
+    println!("\t task two result: {}", task_two_result);
 }
 
-fn task_01(sorted_antennas: HashMap<char, Vec<(i32, i32)>>, width: i32, height: i32) -> i32 {
+fn task_01(sorted_antennas: &HashMap<char, Vec<(i32, i32)>>, width: i32, height: i32) -> i32 {
     let mut result: Vec<(i32, i32)> = vec![];
 
     for (_, positions) in sorted_antennas {
@@ -53,6 +55,45 @@ fn task_01(sorted_antennas: HashMap<char, Vec<(i32, i32)>>, width: i32, height: 
                 let after_next = (next.0 - diff.0, next.1 - diff.1);
                 if is_in_bound(after_next, (width, height)) && !result.contains(&after_next) {
                     result.push(after_next);
+                }
+            }
+        }
+    }
+
+    result.len() as i32
+}
+
+fn task_02(sorted_antennas: &HashMap<char, Vec<(i32, i32)>>, width: i32, height: i32) -> i32 {
+    let mut result: Vec<(i32, i32)> = vec![];
+
+    for (_, positions) in sorted_antennas {
+        for i in 0..positions.len()-1 {
+            let current = positions[i];
+
+            for j in i+1..positions.len() {
+                let next = positions[j];
+                let diff = (current.0 - next.0, current.1 - next.1);
+
+                let mut after_current = current;
+                let mut k = 0;
+                while is_in_bound(after_current, (width, height)) {
+                    if !result.contains(&after_current) {
+                        result.push(after_current);
+                    }
+
+                    k += 1;
+                    after_current = (current.0 + diff.0 * k, current.1 + diff.1 * k);
+                }
+
+                let mut after_next = next;
+                k = 0;
+                while is_in_bound(after_next, (width, height)) {
+                    if !result.contains(&after_next) {
+                        result.push(after_next);
+                    }
+
+                    k += 1;
+                    after_next = (next.0 - diff.0 * k, next.1 - diff.1 * k);
                 }
             }
         }
