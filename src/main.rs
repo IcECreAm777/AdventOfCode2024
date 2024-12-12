@@ -12,6 +12,7 @@ mod day_eight;
 mod day_nine;
 mod day_ten;
 mod day_eleven;
+mod day_twelve;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -41,6 +42,7 @@ fn main() {
         9 => day_nine(),
         10 => day_ten(),
         11 => day_eleven(),
+        12 => day_twelve(),
         _ => run_every_day(),
     }
 }
@@ -59,6 +61,7 @@ fn run_every_day() {
     day_nine();
     day_ten();
     day_eleven();
+    day_twelve();
 
     println!("finished executing every day!")
 }
@@ -137,5 +140,12 @@ fn day_eleven() {
     println!("running day eleven...");
     let start = Instant::now();
     day_eleven::run_day_11();
+    println!("executing day took {} ms", start.elapsed().as_millis());
+}
+
+fn day_twelve() {
+    println!("running day twelve...");
+    let start = Instant::now();
+    day_twelve::run_day_12();
     println!("executing day took {} ms", start.elapsed().as_millis());
 }
