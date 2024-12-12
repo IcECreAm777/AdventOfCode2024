@@ -1,4 +1,9 @@
-use std::{collections::HashMap, fs::read_to_string};
+use std::fs::read_to_string;
+
+mod region;
+mod cell;
+
+use region::Region;
 
 pub fn run_day_12() {
     let path = "src\\day_twelve\\input.txt";
@@ -22,11 +27,14 @@ pub fn run_day_12() {
     }
 
     let mut task_one_result = 0;
+    let mut task_two_result = 0;
     for region in regions {
         task_one_result += region.get_cost();
+        task_two_result += region.get_bulk_cost();
     }
 
     println!("\ttask one result: {}", task_one_result);
+    println!("\ttask two result: {}", task_two_result);
 }
 
 fn find_region(area: &mut Vec<Vec<char>>, start_index: (usize, usize)) -> Region {
@@ -55,77 +63,4 @@ fn find_region(area: &mut Vec<Vec<char>>, start_index: (usize, usize)) -> Region
     }
 
     Region::new(coords, area.len(), area[0].len())
-}
-
-#[derive(Debug)]
-pub struct Region {
-    area: HashMap<(usize, usize), Cell>
-}
-
-impl Region {
-    pub fn new(coords: Vec<(usize, usize)>, width: usize, height: usize) -> Region {
-        let mut cell_map: HashMap<(usize, usize), Cell> = HashMap::new();
-
-        for coord in coords {
-            let mut new_cell = Cell{ up: false, down: false, left: false, right: false };
-
-            if coord.0 > 0 && cell_map.get(&(coord.0 - 1, coord.1)).is_some() { 
-                new_cell.up = true;
-                cell_map.get_mut(&(coord.0 - 1, coord.1)).unwrap().down = true;
-            }
-
-            if coord.1 > 0 && cell_map.get(&(coord.0, coord.1-1)).is_some() { 
-                new_cell.left = true;
-                cell_map.get_mut(&(coord.0, coord.1 -1)).unwrap().right = true;
-            }
-
-            if coord.0 < width - 1 && cell_map.get(&(coord.0 + 1, coord.1)).is_some() { 
-                new_cell.down = true;
-                cell_map.get_mut(&(coord.0 + 1, coord.1)).unwrap().up = true;
-            }
-            
-            if coord.1 < height - 1 && cell_map.get(&(coord.0, coord.1+1)).is_some() { 
-                new_cell.right = true;
-                cell_map.get_mut(&(coord.0, coord.1+1)).unwrap().left = true;
-            }
-
-            cell_map.insert(coord, new_cell);
-        }
-
-        Region {
-            area: cell_map
-        }
-    }
-
-    pub fn get_cost(&self) -> u64 {
-        let area = self.area.len();
-        let mut fences = 0;
-
-        for (_, cell) in self.area.iter() {
-            fences += cell.get_num_fences() as u64;
-        }
-
-        area as u64 * fences
-    }
-}
-
-#[derive(Debug)]
-pub struct Cell {
-    up: bool,
-    down: bool,
-    left: bool,
-    right: bool
-}
-
-impl Cell {
-    pub fn get_num_fences(&self) -> u8 {
-        let mut fences = 0;
-
-        if !self.up { fences += 1; }
-        if !self.down { fences += 1; }
-        if !self.left { fences += 1; }
-        if !self.right { fences += 1; }
-
-        fences
-    }
 }
