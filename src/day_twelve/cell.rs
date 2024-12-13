@@ -17,4 +17,17 @@ impl Cell {
 
         fences
     }
+
+    pub fn is_corner(&self) -> bool {
+        self.up && self.left && !self.right && !self.down || self.up && self.right && !self.left && !self.down 
+            || self.down && self.left && !self.up && !self.right || self.down && self.right && !self.left && !self.up
+    }
+
+    pub fn is_dead_end(&self) -> bool {
+        self.get_num_fences() == 3
+    }
+
+    pub fn is_single_piece(&self) -> bool {
+        !self.up && !self.down && !self.left && !self.right
+    }
 }

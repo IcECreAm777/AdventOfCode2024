@@ -3,8 +3,6 @@ use std::fs::read_to_string;
 mod region;
 mod cell;
 
-use region::Region;
-
 pub fn run_day_12() {
     let path = "src\\day_twelve\\input.txt";
     
@@ -37,7 +35,7 @@ pub fn run_day_12() {
     println!("\ttask two result: {}", task_two_result);
 }
 
-fn find_region(area: &mut Vec<Vec<char>>, start_index: (usize, usize)) -> Region {
+fn find_region(area: &mut Vec<Vec<char>>, start_index: (usize, usize)) -> region::Region {
     let mut to_check = vec![start_index];
     let mut coords = vec![];
     let character = area[start_index.0][start_index.1];
@@ -62,5 +60,5 @@ fn find_region(area: &mut Vec<Vec<char>>, start_index: (usize, usize)) -> Region
         to_check = tmp;
     }
 
-    Region::new(coords, area.len(), area[0].len())
+    region::Region::new(coords, area.len(), area[0].len())
 }
