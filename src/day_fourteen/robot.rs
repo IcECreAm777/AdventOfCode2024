@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Robot {
     start_point: (usize, usize),
     velocity: (i32, i32)
