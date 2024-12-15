@@ -1,5 +1,9 @@
 use std::fs::read_to_string;
 
+mod robot;
+
+use robot::Robot;
+
 pub fn run_day_14() {
     let path = r"src\day_fourteen\input.txt";
 
@@ -21,53 +25,40 @@ pub fn run_day_14() {
 
     let width = 101;
     let height = 103;
+    
+    let task_one_result = solve_task_01(width, height, robots);
+
+    println!("\ttask one result: {}", task_one_result);
+}
+
+fn solve_task_01(width: i32, height: i32, robots: Vec<Robot>) -> u64 {
     let mut quadrants = vec![0; 4];
 
     for robot in robots {
-        let coords = robot.move_robot(width, height);
+        let coords = robot.move_robot(width, height, 100);
+        let index = get_quadrant_index(coords.0, coords.1, width, height);
+        if index < 0 { continue; }
 
-        if coords.0 < width / 2  {
-            if coords.1 < height / 2 {
-                quadrants[0] += 1;
-            } else if coords.1 > height / 2  {
-                quadrants[1] += 1;
-            }
-        } else if coords.0 > width / 2 {
-            if coords.1 < height / 2 {
-                quadrants[2] += 1;
-            } else if coords.1 > height / 2 {
-                quadrants[3] += 1;
-            }
+        quadrants[index as usize] += 1;
+    }
+
+    quadrants.into_iter().product()
+}
+
+fn get_quadrant_index(x: i32, y: i32, width: i32, height: i32) -> i8 {
+    if x < width / 2  {
+        if y < height / 2 {
+            return 0;
+        } else if y > height / 2  {
+            return 1;
+        }
+    } else if x > width / 2 {
+        if y < height / 2 {
+            return 2;
+        } else if y > height / 2 {
+            return 3
         }
     }
 
-    let result: u64 = quadrants.into_iter().product();
-    println!("\ttask one result: {}", result);
-}
-
-#[derive(Debug)]
-pub struct Robot {
-    start_point: (usize, usize),
-    velocity: (i32, i32)
-}
-
-impl Robot {
-    pub fn new(start: (usize, usize), vel: (i32, i32)) -> Robot {
-        Robot {
-            start_point: start,
-            velocity: vel
-        }
-    }
-
-    pub fn move_robot(&self, width: i32, height: i32) -> (i32, i32) {
-        let new_point = (self.start_point.0 as i32 + self.velocity.0 * 100, self.start_point.1 as i32 + self.velocity.1 * 100);
-
-        let raw_x = new_point.0 % width;
-        let raw_y = new_point.1 % height;
-
-        let x = if raw_x < 0 { width - raw_x.abs() } else { raw_x };
-        let y = if raw_y < 0 { height - raw_y.abs() } else { raw_y };
-
-        (x, y)
-    }
+    -1
 }
