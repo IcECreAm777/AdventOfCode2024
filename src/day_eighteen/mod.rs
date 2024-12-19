@@ -10,6 +10,7 @@ pub fn run_day_18() {
     let mut grid = Grid::new(71);
     
     let mut i = -1;
+    let mut last_path = vec![];
     for line in read_to_string(path).unwrap().lines() {
         let split: Vec<&str> = line.split(",").collect();
 
@@ -21,14 +22,17 @@ pub fn run_day_18() {
 
         if i < input_size { continue; }
 
-        let grid_path = grid.a_star();
-
         if i == input_size {
+            let grid_path = grid.a_star();
             println!("\ttask one result: {}", grid_path.len()-1);
             continue;
         }
 
-        if grid_path.len() == 0 {
+        if last_path.contains(&(x, y)) { continue; }
+
+        last_path = grid.a_star();
+
+        if last_path.len() == 0 {
             println!("\ttask two result: {}", line);
             return;
         }
